@@ -31,6 +31,7 @@ async function imageTransformer(url, subreddit, author) {
     }
 
     let redditLogo = await Canvas.loadImage(__dirname + '/watermark.svg');
+    let compactRedditLogo = await Canvas.loadImage(__dirname + '/redditlogo.png');
     let canv = Canvas.createCanvas(resizedImage.width, resizedImage.height * 1.125);
     let ctx = canv.getContext('2d');
     let watermarkHeight = canv.height - resizedImage.height;
@@ -69,6 +70,8 @@ async function imageTransformer(url, subreddit, author) {
     //ctx.fillText(txt, sideSpacing, resizedImage.height + txtHoffset, resizedImage.width - 20 - width);
     if (textWidthOffset <= resizedImage.width - sideSpacing - width) {
         ctx.drawImage(redditLogo, resizedImage.width - sideSpacing - width, resizedImage.height + imgHoffset, width, height);
+    } else if (textWidthOffset <= resizedImage.width - height - sideSpacing) {
+        ctx.drawImage(compactRedditLogo, resizedImage.width - sideSpacing - height, resizedImage.height + imgHoffset, height, height);
     }
     return canv.toBuffer();
 }
