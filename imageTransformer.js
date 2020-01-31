@@ -12,18 +12,32 @@ const Canvas = require('canvas');
 async function imageTransformer(url, subreddit, author) {
     let originalImage = await Canvas.loadImage(url);
 
-    if (originalImage.height < 200 || originalImage.width < 200) {
-        throw new Error("image too small");
+    let resizedImage = {
+        width: originalImage.width,
+        height: originalImage.height
+    }
+
+    if (originalImage.height < 400 || originalImage.width < 400) {
+        if (originalImage.height < originalImage.width) {
+            resizedImage.height = 400;
+            resizedImage.width *= (400/resizedImage.height);
+        } else if (originalImage.height > originalImage.width) {
+            resizedImage.width = 400;
+            resizedImage.height *= (400/resizedImage.width);
+        } else {
+            resizedImage.height = 400;
+            resizedImage.width = 400;
+        }
     }
 
     let redditLogo = await Canvas.loadImage(__dirname + '/watermark.svg');
-    let canv = Canvas.createCanvas(originalImage.width, originalImage.height * 1.125);
+    let canv = Canvas.createCanvas(resizedImage.width, resizedImage.height * 1.125);
     let ctx = canv.getContext('2d');
-    let watermarkHeight = canv.height - originalImage.height;
+    let watermarkHeight = canv.height - resizedImage.height;
 
     ctx.fillStyle = '#272729';
     ctx.fillRect(0, 0, canv.width, canv.height);
-    ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height);
+    ctx.drawImage(originalImage, 0, 0, resizedImage.width, resizedImage.height);
     ctx.fillStyle = '#ffffff';
     ctx.textBaseline = 'middle';
     let isUsingShorthand = false;
@@ -36,13 +50,13 @@ async function imageTransformer(url, subreddit, author) {
     let sideSpacing = Math.floor(watermarkHeight/3);
     let imgHoffset = Math.floor(watermarkHeight * 0.25);
     ctx.font = `${txtSize}px Helvetica`;
-    if (ctx.measureText(txtBase).width > originalImage.width - width - 30) {
+    if (ctx.measureText(txtBase).width > resizedImage.width - width - 30) {
         //txt = `Posted in r/${subreddit}`;
         isUsingShorthand = true;
     }
     let addText = (txt, bold) => {
         ctx.font = `${bold ? 'bold ' : ''}${txtSize}px Helvetica`;
-        ctx.fillText(txt, sideSpacing + textWidthOffset, originalImage.height + txtHoffset, originalImage.width - 20 - width);
+        ctx.fillText(txt, sideSpacing + textWidthOffset, resizedImage.height + txtHoffset, resizedImage.width - 20 - width);
         textWidthOffset += ctx.measureText(txt).width;
         console.log(textWidthOffset);
     }
@@ -52,8 +66,8 @@ async function imageTransformer(url, subreddit, author) {
         addText(' by ', false);
         addText(`u/${author}`, true);
     }
-    //ctx.fillText(txt, sideSpacing, originalImage.height + txtHoffset, originalImage.width - 20 - width);
-    ctx.drawImage(redditLogo, originalImage.width - sideSpacing - width, originalImage.height + imgHoffset, width, height);
+    //ctx.fillText(txt, sideSpacing, resizedImage.height + txtHoffset, resizedImage.width - 20 - width);
+    ctx.drawImage(redditLogo, resizedImage.width - sideSpacing - width, resizedImage.height + imgHoffset, width, height);
     return canv.toBuffer();
 }
 
