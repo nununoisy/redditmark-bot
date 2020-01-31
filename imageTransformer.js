@@ -20,10 +20,10 @@ async function imageTransformer(url, subreddit, author) {
     if (originalImage.height < 400 || originalImage.width < 400) {
         if (originalImage.height < originalImage.width) {
             resizedImage.height = 400;
-            resizedImage.width *= (400/resizedImage.height);
+            resizedImage.width *= (400/originalImage.height);
         } else if (originalImage.height > originalImage.width) {
             resizedImage.width = 400;
-            resizedImage.height *= (400/resizedImage.width);
+            resizedImage.height *= (400/originalImage.width);
         } else {
             resizedImage.height = 400;
             resizedImage.width = 400;
