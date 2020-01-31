@@ -67,7 +67,9 @@ async function imageTransformer(url, subreddit, author) {
         addText(`u/${author}`, true);
     }
     //ctx.fillText(txt, sideSpacing, resizedImage.height + txtHoffset, resizedImage.width - 20 - width);
-    ctx.drawImage(redditLogo, resizedImage.width - sideSpacing - width, resizedImage.height + imgHoffset, width, height);
+    if (textWidthOffset <= resizedImage.width - sideSpacing - width) {
+        ctx.drawImage(redditLogo, resizedImage.width - sideSpacing - width, resizedImage.height + imgHoffset, width, height);
+    }
     return canv.toBuffer();
 }
 
