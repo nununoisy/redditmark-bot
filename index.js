@@ -18,7 +18,8 @@ const getMediaUrl = message =>
     (message.attachments.size === 1 ? message.attachments.first() : message.embeds[0]).url;
 
 const funnySubreddit = () => {
-    let subs = ['okbuddyretard','satire','AmItheAsshole','cornedbeefapproved','dankmemes','memes','4chan','greentext','arabfunny','ProRevenge','TIFU','gaming'];
+    let subs = ['okbuddyretard','satire','AmItheAsshole','cornedbeefapproved','dankmemes','memes','4chan','greentext','arabfunny','ProRevenge','TIFU','gaming','CombatFootage','worldnews'];
+    ['cemetery','homicide','necrophilia','heaven','hell','flogging','amputation'].forEach(comedysub=>subs.push(`comedy${comedysub}`));
     return subs[Math.floor(Math.random() * subs.length)];
 }
 
