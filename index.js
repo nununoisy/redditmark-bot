@@ -41,5 +41,5 @@ client.on('message', message => {
 });
 
 client.login(process.env.BOTTOKEN).catch(e=>{
-    console.log("Couldn't start discord",t);
+    console.log("Couldn't start discord",e);
 })
