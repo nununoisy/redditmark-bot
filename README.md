@@ -10,3 +10,5 @@ BOTTOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ROLENAME='@
 where 
 + BOTTOKEN is the bot's token and 
 + ROLENAME (optional) is the name of a role that users need to call the bot
+
+You also need to add a copy of Helvetica and Helvetica Bold to your system's fonts.
