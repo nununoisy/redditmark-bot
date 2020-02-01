@@ -19,8 +19,7 @@ const hasCustomSubreddit = message => {
     let chunks = message.content.split(" ");
     for (let i=0; i<chunks.length; i++) {
         if (subredditRegex.test(chunks[i])) {
-            if (chunks[i].substr(0,1) === "R") chunks[i] = chunks[i].replace('R','r');
-            return chunks[i];
+            return chunks[i].substr(2,chunks[i].length - 2);
         }
     }
     return false;
