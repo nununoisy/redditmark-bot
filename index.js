@@ -14,6 +14,18 @@ const shouldRespond = message => {
     return isCommand && isImage && isUserAuthorized;
 }
 
+const hasCustomSubreddit = message => {
+    const subredditRegex = /^[rR]\/.+$/;
+    let chunks = message.content.split(" ");
+    for (let i=0; i<chunks.length; i++) {
+        if (subredditRegex.test(chunks[i])) {
+            if (chunks[i].substr(0,1) === "R") chunks[i] = chunks[i].replace('R','r');
+            return chunks[i];
+        }
+    }
+    return false;
+}
+
 const getMediaUrl = message =>
     (message.attachments.size === 1 ? message.attachments.first() : message.embeds[0]).url;
 
@@ -30,10 +42,11 @@ client.once('ready', () => {
 client.on('message', message => {
     console.log(`got message: ${message.content}`);
     if (shouldRespond(message)) {
-        imageTransformer(getMediaUrl(message), funnySubreddit(), message.author.username).then(buf=>{
+        let sub = hasCustomSubreddit(message) || funnySubreddit();
+        imageTransformer(getMediaUrl(message), sub, message.author.username).then(buf=>{
             message.channel.send(`you stole from reddit??? cringe`, new Discord.Attachment(buf, 'reddit.png'));
         }).catch(err=>{
-            message.channel.send("Image is too small (or something else broke)");
+            message.channel.send("Something broke");
             console.log(err);
         })
     } else {
