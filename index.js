@@ -10,7 +10,7 @@ const shouldRespond = message => {
         ||
         (message.embeds.length === 1 && message.embeds[0].type === "image")
     );
-    let isUserAuthorized = !!process.env.ROLENAME ? message.member.roles.some(r=>r.name===process.env.ROLENAME) : true;
+    let isUserAuthorized = !!process.env.ROLENAME ? message.member.roles.some(r=>r.name===process.env.ROLENAME) || message.member.hasPermission("ADMINISTRATOR") : true;
     return isCommand && isImage && isUserAuthorized;
 }
 
