@@ -29,7 +29,7 @@ const hasCustomUsername = message => {
     const subredditRegex = /^[uU]\/.+$/;
     let chunks = message.content.split(" ");
     for (let i=0; i<chunks.length; i++) {
-        if (subredditRegex.test(chunks[i])) {
+        if (subredditRegex.test(chunks[i]) && i !== 0) {
             return chunks[i].substr(2,chunks[i].length - 2);
         }
     }
