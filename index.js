@@ -25,6 +25,17 @@ const hasCustomSubreddit = message => {
     return false;
 }
 
+const hasCustomUsername = message => {
+    const subredditRegex = /^[uU]\/.+$/;
+    let chunks = message.content.split(" ");
+    for (let i=0; i<chunks.length; i++) {
+        if (subredditRegex.test(chunks[i])) {
+            return chunks[i].substr(2,chunks[i].length - 2);
+        }
+    }
+    return false;
+}
+
 const getMediaUrl = message =>
     (message.attachments.size === 1 ? message.attachments.first() : message.embeds[0]).url;
 
@@ -42,7 +53,8 @@ client.on('message', message => {
     console.log(`got message: ${message.content}`);
     if (shouldRespond(message)) {
         let sub = hasCustomSubreddit(message) || funnySubreddit();
-        imageTransformer(getMediaUrl(message), sub, message.author.username).then(buf=>{
+        let username = hasCustomUsername(message) || message.author.username.replace(/ /g, "_");
+        imageTransformer(getMediaUrl(message), sub, username).then(buf=>{
             message.channel.send(`you stole from reddit??? cringe`, new Discord.Attachment(buf, 'reddit.png'));
         }).catch(err=>{
             message.channel.send("Something broke");
