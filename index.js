@@ -60,6 +60,9 @@ client.on('message', message => {
             message.channel.send("Something broke");
             console.log(err);
         })
+    } else if (message.content === "u/redditmark help") {
+        message.channel.send(`I'll put a funny reddit watermark on your image. Write a post starting with u/redditmark and attach or embed an image and I'll watermark it.
+        If you put a subreddit in the form of r/subreddit or another username in the form of u/username I'll use those.`)
     } else {
         console.log("not responding")
     }
